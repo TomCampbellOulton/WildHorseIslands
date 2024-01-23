@@ -2,24 +2,24 @@ import os
 import imagehash
 from PIL import Image
 import pytesseract
+# Setup tesseract
+pytesseract.pytesseract.tesseract_cmd = r'C:\Users\tcamp\AppData\Local\Programs\Tesseract-OCR\tesseract.exe'
+folder_path_for_personalities = r"C:\Users\tcamp\Desktop\WildHorseIslands\Personalities\Headshots"
 
 
-def dhash(image_path, hash_size=8):
+def dhash(image, hash_size=4):
     # Calculate the difference hash (dhash) for an image
-    image = Image.open(image_path)
     return imagehash.dhash(image, hash_size=hash_size)
 
 def compare_images(new_image, folder_path):
     try:
         # Calculate the hash for the new image
         new_hash = dhash(new_image)
-
         # Iterate through images in the folder
         best_match = None
-        best_similarity = float('-inf')
-
+        best_similarity = float('inf')
         for filename in os.listdir(folder_path):
-            if filename.endswith(".jpg") or filename.endswith(".png"):
+            if filename.endswith(".png"):
                 # Calculate the hash for the saved image
                 saved_image_path = os.path.join(folder_path, filename)
                 saved_image = Image.open(saved_image_path)
@@ -28,43 +28,74 @@ def compare_images(new_image, folder_path):
                 # Calculate the Hamming distance between the hashes
                 hamming_distance = new_hash - saved_hash
 
+                print(f"Score = {hamming_distance} for {saved_image_path}")
+
                 # Update best match if the current image is more similar
-                if hamming_distance > best_similarity:
+                if hamming_distance < best_similarity:
                     best_similarity = hamming_distance
                     best_match = saved_image_path
 
         return best_match, best_similarity
     except:
         print( "Error D:")
+        return None, None
 
-my_image = Image.open('image_1.png')
-# Setup tesseract
-pytesseract.pytesseract.tesseract_cmd = r'C:\Users\tcamp\AppData\Local\Programs\Tesseract-OCR\tesseract.exe'
+# Define the parameters
+def get_stats_coords(image):
+    # Size of image
+    image_size = image.size
+    # If the resolution is 1366x768
+    if image_size == (1366, 768):
 
+        Coat = (200,320, 300, 350)
+        Mane = (200,350, 300,380)
+        Tail = (200,380, 300,410)
 
-# Define the areas of image to check
-Coat = (200,320, 300, 350)
-Mane = (200,350, 300,380)
-Tail = (200,380, 300,410)
+        Personality = (306,247, 360,300)
+        Sex = (360,280, 410,300)
+        Height = (410,280, 460,300)
 
-Personality = (305,280, 360,300)
-Sex = (360,280, 410,300)
-Height = (410,280, 460,300)
+        Speed = (305,340, 370,360)
+        Stamina = (370,340, 436,360)
+        Strength = (438,340, 502,360)
 
-Speed = (305,340, 370,360)
-Stamina = (370,340, 436,360)
-Strength = (438,340, 502,360)
+        Jump = (305,395, 370,415)
+        Agility = (370,395, 436,415)
+        Happiness = (436,395, 502,415)
 
-Jump = (305,395, 370,415)
-Agility = (370,395, 436,415)
-Happiness = (436,395, 502,415)
+        Purity = (180,480, 260,500)
+        Bond = (260,480, 340, 500)
 
-Purity = (180,480, 260,500)
-Bond = (260,480, 340, 500)
+    # If the resolution is 1920x1080
+    elif image_size == (1920,1080):
+        Coat = (280,450, 410, 490)
+        Mane = (280,490, 410,530)
+        Tail = (280,530, 410,574)
 
-# Store all the areas in a list
-key_areas = (Coat, Mane, Tail, Personality, Sex, Height, Speed, Stamina, Strength, Jump, Agility, Happiness, Purity, Bond)
-folder_path_for_personalities = r"C:\Users\tcamp\Desktop\Text Reader\Personalities"
+        Personality = (430,345, 500,420)
+        Sex = (500,390, 580,420)
+        Height = (580,390, 650,420)
+
+        Speed = (425,485, 520,510)
+        Stamina = (520,485, 615,510)
+        Strength = (615,485, 710,510)
+
+        Jump = (425,550, 520,580)
+        Agility = (520,550, 615,580)
+        Happiness = (615,550, 710,580)
+
+        Purity = (250,640, 360,660)
+        Bond = (365,640, 480, 660)
+
+    # Unsupported size
+    else:
+        print("This size is not supported :c")
+    
+    # Store all the areas in a list
+    key_areas = (Coat, Mane, Tail, Personality, Sex, Height, Speed, Stamina, Strength, Jump, Agility, Happiness, Purity, Bond)
+
+    # Return the coords
+    return key_areas
 
 class Horse:
     def __init__(self):
@@ -179,9 +210,6 @@ class Horse:
 
     def set_capture_chance(self, value):
         self._chance_of_capture = value
-    
-# List of all horses recorded 
-horses = []
 
 def convert_to_binary_black_and_white_in_memory(original_image, threshold=128):
     try:
@@ -209,7 +237,6 @@ def convert_to_binary_black_and_white_in_memory(original_image, threshold=128):
         print(f"An error occurred: {e}")
         return None
 
-
 def read_data(image, key_areas, folder_path_for_personalities):
     data_read = []
 
@@ -219,11 +246,14 @@ def read_data(image, key_areas, folder_path_for_personalities):
     for area in key_areas:
         cropped_image = image.crop(area)
         # If the stat is personality, use image recognition instead
-        if counter == 4:
+        if counter == 3:
             # Find the personality
             best_match, similarity_score = compare_images(cropped_image, folder_path_for_personalities)
-            print(best_match)
-            print(similarity_score)
+            # Convert the best_match from path to personality name
+            file_name = best_match.split("\\")[-1]
+            # Remove the .png
+            personality_type = file_name.split(".png")[0]
+            data_read.append(personality_type)
         else:
             # Image size
             width, height = cropped_image.size
@@ -231,8 +261,80 @@ def read_data(image, key_areas, folder_path_for_personalities):
             new_image = cropped_image.resize((10*width, 10*height))
             text = pytesseract.pytesseract.image_to_string(new_image)
             data_read.append(text)
-            print(text)
-            counter += 1
+        counter += 1
     # Record this data
+            
+    #Return the data
+    return data_read
 
-read_data(my_image, key_areas, folder_path_for_personalities)
+# Process my image
+def process_image(image):
+    # Identify the areas for each component of the horses stats
+    key_areas = get_stats_coords(image)
+    # Read the stats
+    horse_data = read_data(image, key_areas, folder_path_for_personalities)
+    # Create the horse
+    horse = Horse()
+    # Set the horses stats
+    set_horse_stats(horse, horse_data)
+    return horse
+
+def set_horse_stats(horse, stats):
+    # Set the coat
+    horse.set_coat = stats[0]
+
+    # Seperate the mane length and colour
+    mane_colour, mane_length = check_hair_colour(stats[1])
+    mane = (mane_colour, mane_length)
+    horse.set_mane(mane)
+
+    # Seperate the tail length and colour
+    tail = check_hair_colour(stats[2])
+    horse.set_tail(tail)
+
+    # Set the horses stats
+    horse.set_personality(stats[3])
+    horse.set_sex(stats[4])
+    horse.set_height(stats[5])
+    horse.set_speed(stats[6])
+    horse.set_stamina(stats[7])
+    horse.set_strength(stats[8])
+    horse.set_jump(stats[9])
+    horse.set_agility(stats[10])
+    horse.set_happiness(stats[11])
+    horse.set_purity(stats[12])
+    horse.set_bond(stats[13])
+
+
+def check_hair_colour(value):
+    file = open("Hair Colours.txt", "r")
+    legal_colours = file.readlines()
+    file.close()
+    # Default for style and colour to be null
+    style = colour = None
+
+    #Check each hair colour
+    for hair_colour in legal_colours:
+        # Remove the special character \n
+        hair_colour = hair_colour.replace("\n","")
+
+        # Check the colour is not a comment
+        # If the hair colour is in the input
+        if (("#" in hair_colour) == False) and (hair_colour in value):
+            # Seperate the colour and style
+            colour = hair_colour
+            style = value.replace(colour, "").replace(" \n","")
+    
+    return (colour, style)
+
+# List of hair colours
+hair_colours = []
+# List of hair lengths
+hair_lengths = []
+
+# List of all horses recorded 
+horses = []
+
+my_image = Image.open('image_2.png')
+horses.append(process_image(my_image))
+print(horses[0].get_height())

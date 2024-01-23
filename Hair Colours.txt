@@ -1,0 +1,158 @@
+# Natural
+Light Chestnut
+Dark Chestnut
+Liver Chestnut
+Light Grey
+Dark Grey
+White
+Black
+Palomino
+Flaxen
+Flaxen fade
+Rodblakk
+Ulsblakk
+Brunblakk
+Gulblakk
+Gra
+Pearl
+# Dyed
+Dark Blue
+Red
+Orange
+Dark Green
+Yellow
+Pink
+Baby Blue
+Turquoise
+# Event Dyed
+Red/Pink Fade
+Pink/Red Fade
+Shamrock Green
+Gold
+Black/Gold Fade
+White/Gold Fade
+Pastel Green
+Pastel Blue
+Pastel Pink
+Pastel Pink/Green Fade
+Pastel Purple/Yellow Fade
+Coral
+Sunny Fade
+Mermaid Fade
+Sunset Fade
+Seafoam Fade
+Dark Autumn Fade
+Bright Autumn Fade
+Pumkin Fade
+Halloween Fade
+Candy Corn Fade
+Witch Fade
+Winter Fade
+Glacier Fade
+Hot Cocoa Fade
+Northern Lights Fade
+Deer Fade
+Elf Fade
+Santa Fade
+Creamy Fade
+Rose Gold Fade
+Brown/Pink Fade
+Love Fade
+Pink/Gold Fade
+Lavender Fade
+Pastel Pink
+Pastel Green
+Pastel Blue
+Pastel Pink/Green Fade
+Lavender Fade
+Monarch Fade
+Pastel Purple/ Yellow Fade
+Coral
+Sunny Fade
+Chocolate Sprinkle
+Mermaid Fade
+Sunset Fade
+Fiery Sunset Fade
+Deep Sea Fade
+Ocean Seafoam Fade
+Light Magic Fade
+Weather Magic Fade
+Fire Magic Fade
+Ice Magic Fade
+Plant Magic Fade
+Water Magic Fade
+Dark Autumn Fade
+Overcast Fade
+Bright Autumn Fade
+Pumpkin Spice Fade
+Pumpkin Fade
+Equinox Fade
+Graveyard Fade
+Jack-o'-Lantern Fade
+Halloween Fade
+Candy Corn Fade
+Witch Fade
+Illusion Magic Fade
+Purple Haze Fade
+Winter Fade
+Icey Fade Hair
+Glacier Fade
+Hot Cocoa Fade
+Northern Lights Fade
+Deer Fade
+Elf Fade
+Santa Fade
+# Robux Dyes
+Fire Fade
+Black/Purple
+Purple Fade
+Lemon Lime
+Blue Fade
+Cotton Candy
+Black/White
+Black/Green
+Black/Blue
+Flaxen Fade
+Red/Blue
+Purple
+Hot Pink
+Light Green
+# Chest Dyes
+Beachy Fade
+Peachy Fade
+# Island Unique
+Icey Black
+Icey Blue
+Icey White
+Icey Pink
+Leafy
+Flowery
+Pearly
+Pearly Green
+Leathery
+Clear Quartz
+Pearly Pink
+Cow Print
+Limestone
+Ruby
+Sandstone
+Pearly Red
+Zebra Stripes
+Sapphire
+Diamond
+Pearly Orange
+Pink Cow Print
+Topaz
+Amethyst
+Emerald
+Mossy
+Tiger Stripes
+Neon Purple
+Neon Blue
+Obsidian
+Moonstone
+Pearly Blue
+Volcanic Orange
+Volcanic Black
+Prismatic
+Pearly Black
