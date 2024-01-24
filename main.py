@@ -28,8 +28,6 @@ def compare_images(new_image, folder_path):
                 # Calculate the Hamming distance between the hashes
                 hamming_distance = new_hash - saved_hash
 
-                print(f"Score = {hamming_distance} for {saved_image_path}")
-
                 # Update best match if the current image is more similar
                 if hamming_distance < best_similarity:
                     best_similarity = hamming_distance
