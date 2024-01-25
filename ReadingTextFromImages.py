@@ -4,7 +4,8 @@ from PIL import Image
 import pytesseract
 # Setup tesseract
 pytesseract.pytesseract.tesseract_cmd = r'C:\Users\tcamp\AppData\Local\Programs\Tesseract-OCR\tesseract.exe'
-folder_path_for_personalities = os.getcwd() + r"\Personalities\Headshots"
+base_path = os.getcwd()
+folder_path_for_personalities = base_path + r"\Personalities\Headshots"
 
 
 def dhash(image, hash_size=4):
@@ -39,56 +40,107 @@ def compare_images(new_image, folder_path):
         return None, None
 
 # Define the parameters
-def get_stats_coords(image):
-    # Size of image
-    image_size = image.size
-    # If the resolution is 1366x768
-    if image_size == (1366, 768):
+def get_stats_coords(image, full_screenshot=False):
+    if full_screenshot:
+        # Size of image
+        image_size = image.size
+        # If the resolution is 1366x768
+        if image_size == (1366, 768):
 
-        Coat = (200,320, 300, 350)
-        Mane = (200,350, 300,380)
-        Tail = (200,380, 300,410)
+            Coat = (200,320, 300, 350)
+            Mane = (200,350, 300,380)
+            Tail = (200,380, 300,410)
 
-        Personality = (306,247, 360,300)
-        Sex = (360,280, 410,300)
-        Height = (410,280, 460,300)
+            Personality = (306,247, 360,300)
+            Sex = (360,280, 410,300)
+            Height = (410,280, 460,300)
 
-        Speed = (305,340, 370,360)
-        Stamina = (370,340, 436,360)
-        Strength = (438,340, 502,360)
+            Speed = (305,340, 370,360)
+            Stamina = (370,340, 436,360)
+            Strength = (438,340, 502,360)
 
-        Jump = (305,395, 370,415)
-        Agility = (370,395, 436,415)
-        Happiness = (436,395, 502,415)
+            Jump = (305,395, 370,415)
+            Agility = (370,395, 436,415)
+            Happiness = (436,395, 502,415)
 
-        Purity = (180,480, 260,500)
-        Bond = (260,480, 340, 500)
+            Purity = (180,480, 260,500)
+            Bond = (260,480, 340, 500)
 
-    # If the resolution is 1920x1080
-    elif image_size == (1920,1080):
-        Coat = (280,450, 410, 490)
-        Mane = (280,490, 410,530)
-        Tail = (280,530, 410,574)
+        # If the resolution is 1920x1080
+        elif image_size == (1920,1080):
+            Coat = (280,450, 410, 490)
+            Mane = (280,490, 410,530)
+            Tail = (280,530, 410,574)
 
-        Personality = (430,345, 500,420)
-        Sex = (500,390, 580,420)
-        Height = (580,390, 650,420)
+            Personality = (430,345, 500,420)
+            Sex = (500,390, 580,420)
+            Height = (580,390, 650,420)
 
-        Speed = (425,485, 520,510)
-        Stamina = (520,485, 615,510)
-        Strength = (615,485, 710,510)
+            Speed = (425,485, 520,510)
+            Stamina = (520,485, 615,510)
+            Strength = (615,485, 710,510)
 
-        Jump = (425,550, 520,580)
-        Agility = (520,550, 615,580)
-        Happiness = (615,550, 710,580)
+            Jump = (425,550, 520,580)
+            Agility = (520,550, 615,580)
+            Happiness = (615,550, 710,580)
 
-        Purity = (250,640, 360,660)
-        Bond = (365,640, 480, 660)
+            Purity = (250,640, 360,660)
+            Bond = (365,640, 480, 660)
 
-    # Unsupported size
-    else:
-        print("This size is not supported :c")
-    
+        # Unsupported size
+        else:
+            print("This size is not supported :c")
+    else: # A screenshot of just the stats
+        # Size of image
+        image_size = image.size
+        # The size of the screenshot if the resolution when taking the screenshot
+        # was 1920x1080
+        if image_size == (522,580):
+            # Updated coordinates
+            Coat = (61, 200, 170, 259)
+            Mane = (61, 240, 170, 280)
+            Tail = (61, 280, 170, 324)
+
+            Personality = (211, 95, 280, 170)
+            Sex = (280, 140, 360, 170)
+            Height = (360, 140, 430, 170)
+
+            Speed = (206, 235, 301, 260)
+            Stamina = (301, 235, 396, 260)
+            Strength = (396, 235, 491, 260)
+
+            Jump = (206, 300, 301, 330)
+            Agility = (301, 300, 396, 330)
+            Happiness = (396, 300, 491, 330)
+
+            Purity = (31, 391, 141, 411)
+            Bond = (146, 391, 261, 411)
+        # The size of the screenshot if the resolution when taking the screenshot
+        # was 1366x768
+        elif image_size == (373, 514):
+            # Updated coordinates
+            Coat = (45, 143, 145, 160)
+            Mane = (45, 173, 145, 203)
+            Tail = (45, 203, 145, 233)
+
+            Personality = (151, 70, 233, 93)
+            Sex = (203, 103, 253, 113)
+            Height = (253, 103, 303, 113)
+
+            Speed = (178, 163, 243, 173)
+            Stamina = (243, 163, 289, 173)
+            Strength = (315, 163, 375, 173)
+
+            Jump = (178, 218, 243, 228)
+            Agility = (243, 218, 289, 228)
+            Happiness = (289, 218, 345, 228)
+
+            Purity = (23, 303, 115, 310)
+            Bond = (103, 303, 213, 310)
+
+        # Unsupported size
+        else:
+            print("This size is not supported :c")
     # Store all the areas in a list
     key_areas = (Coat, Mane, Tail, Personality, Sex, Height, Speed, Stamina, Strength, Jump, Agility, Happiness, Purity, Bond)
 
@@ -114,6 +166,10 @@ class Horse:
         self._purity = 0
         self._bond = 0
         self._chance_of_capture = 0
+        self._obtained_method = ""
+        self._rarity = 0
+        self._island = ""
+        self._age = ""
     
     def get_coat(self):
         return self._coat
@@ -172,6 +228,15 @@ class Horse:
     def get_capture_chance(self):
         return self._chance_of_capture
 
+    def get_obtained_method(self):
+        return self._obtained_method, self._island
+
+    def get_rarity(self):
+        return self._rarity
+    
+    def get_age(self):
+        return self._age
+
     # Setters
     def set_personality(self, value):
         self._personality = value
@@ -208,6 +273,18 @@ class Horse:
 
     def set_capture_chance(self, value):
         self._chance_of_capture = value
+
+    def set_obtained_method(self, obtaining_method, island):
+        self._obtained_method = obtaining_method
+        self._island = island
+
+    def set_rarity(self, rarity):
+        self._rarity = rarity
+
+    def set_age(self, age):
+        self._age = age
+    
+
 
 def convert_to_binary_black_and_white_in_memory(original_image, threshold=128):
     try:
@@ -303,6 +380,49 @@ def set_horse_stats(horse, stats):
     horse.set_purity(stats[12])
     horse.set_bond(stats[13])
 
+def process_purity(image, horse):
+    # Read the image
+    text = pytesseract.pytesseract.image_to_string(image)
+    copy_of_text = text[0:]
+    # Check if the horse was bred
+    if "bred" in text or "caught" in text:
+        #Split the text (They/they -> hey had a...)
+        text = text.split("hey had a ")
+        # Process the age
+        age_text = text[0]
+        # Split the age text at each comma, seperating into "They were born on day", "month date", "year time"
+        age_text = age_text.split(",")
+        age_text[2] = age_text[2].split(".")[0]
+        age = f"{age_text[1]} {age_text[2]}"
+
+
+        # Process the chance
+        chance_text = text[1].remove("1/")
+        # Now take away any remaining text
+        chance = int(''.join(char for char in chance_text if char.isdigit()))
+
+        # Save the age and chance to the horse
+        horse.set_age(age)
+        horse.set_capture_chance(chance)
+
+        # Default of breeding hub for island
+        island = "Breeding Hub"
+        # Default of "Breeding" for obtaining method
+        obtaining_method = "Breeding"
+
+        # If captured
+        if "caught" in copy_of_text:
+            # Clean the text by removing the sentences prior to the island and removing the "."
+            island = copy_of_text.split("on ")[-1].replace(".","")
+            obtaining_method = "Capture"
+        
+        # Store the horses data
+        horse.set_obtained_method(obtaining_method,island)
+
+
+    # Otherwise the horse was purchased
+    else:
+        horse.set_obtained_method("Purchase","Unknown")
 
 def check_hair_colour(value):
     file = open("Hair Colours.txt", "r")
@@ -333,6 +453,26 @@ hair_lengths = []
 # List of all horses recorded 
 horses = []
 
-my_image = Image.open('image_2.png')
-horses.append(process_image(my_image))
-print(horses[0].get_height())
+# List all images in directory
+path = f"{base_path}\\UnprocessedHorses"
+all_files = os.listdir(path)
+# Split into pairs - horse stats and rarity
+paired_files = {}
+list_of_keys = []
+for file in all_files:
+    # If there is a file ending in _stats, make that the key and change 
+    # the _stats to _rarity for the value
+    if "_stats" in file:
+        value = file.replace("_stats","_rarity")
+        paired_files[file] = value
+        #Add the key to a list
+        list_of_keys.append(file)
+
+# Now process these images
+for key in list_of_keys:
+    stats_image = Image.open(f"{path}\\{key}")
+    rarity_image = Image.open(f"{path}\\{paired_files[key]}")
+    # Process the stats
+    horses.append(process_image(stats_image))
+    # Process the purity
+    process_purity(rarity_image, horses[-1])

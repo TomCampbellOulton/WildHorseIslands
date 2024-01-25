@@ -1,10 +1,10 @@
 from PIL import Image
-
+import os
 
 # Coordinates of the headshots
 Personality = (430,345, 500,420)
 # Directory Location
-path = r"C:\Users\tcamp\Desktop\WildHorseIslands\Personalities\Sources"
+path = os.getcwd() + r"\Personalities\Sources"
 # List of all current personalities
 personalities = ["Clingy","Easy Going","Energetic","Grumpy","Independent","Lazy","Sassy","Spooky"]
 
