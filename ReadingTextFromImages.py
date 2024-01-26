@@ -95,7 +95,7 @@ def get_stats_coords(image, full_screenshot=False):
         image_size = image.size
         # The size of the screenshot if the resolution when taking the screenshot
         # was 1920x1080
-        if image_size == (522,580):
+        if image_size == (521,579):
             # Updated coordinates
             Coat = (61, 200, 170, 259)
             Mane = (61, 240, 170, 280)
@@ -141,6 +141,7 @@ def get_stats_coords(image, full_screenshot=False):
         # Unsupported size
         else:
             print("This size is not supported :c")
+            print(image_size)
     # Store all the areas in a list
     key_areas = (Coat, Mane, Tail, Personality, Sex, Height, Speed, Stamina, Strength, Jump, Agility, Happiness, Purity, Bond)
 
@@ -170,6 +171,8 @@ class Horse:
         self._rarity = 0
         self._island = ""
         self._age = ""
+        self._name = ""
+        self._breed = ""
     
     def get_coat(self):
         return self._coat
@@ -236,6 +239,18 @@ class Horse:
     
     def get_age(self):
         return self._age
+    
+    def get_name(self):
+        return self._name
+    
+    def get_breed(self):
+        return self._breed
+
+    def get_everything(self):
+        everything = (self.get_age(), self.get_name(), self.get_breed(), self.get_sex(), self.get_coat(), self.get_mane(), self.get_tail(),
+                      self.get_personality(), self.get_height(), self.get_speed(), self.get_stamina(), self.get_strength(), self.get_jump(), self.get_agility(),
+                      self.get_happiness(), self.get_purity(), (self.get_obtained_method(), self.get_capture_chance()) )
+        return everything
 
     # Setters
     def set_personality(self, value):
@@ -284,6 +299,11 @@ class Horse:
     def set_age(self, age):
         self._age = age
     
+    def set_name(self, name):
+        self._name = name
+    
+    def set_breed(self, breed):
+        self._breed = breed
 
 
 def convert_to_binary_black_and_white_in_memory(original_image, threshold=128):
@@ -334,7 +354,7 @@ def read_data(image, key_areas, folder_path_for_personalities):
             width, height = cropped_image.size
             # Enlarge image by 25 times
             new_image = cropped_image.resize((10*width, 10*height))
-            text = pytesseract.pytesseract.image_to_string(new_image)
+            text = pytesseract.pytesseract.image_to_string(new_image, lang="train")
             data_read.append(text)
         counter += 1
     # Record this data
@@ -382,12 +402,14 @@ def set_horse_stats(horse, stats):
 
 def process_purity(image, horse):
     # Read the image
-    text = pytesseract.pytesseract.image_to_string(image)
+    text = pytesseract.pytesseract.image_to_string(image, lang="train")
+
+    print(text)
     copy_of_text = text[0:]
     # Check if the horse was bred
     if "bred" in text or "caught" in text:
         #Split the text (They/they -> hey had a...)
-        text = text.split("hey had a ")
+        text = text.split("hey had")
         # Process the age
         age_text = text[0]
         # Split the age text at each comma, seperating into "They were born on day", "month date", "year time"
@@ -423,6 +445,21 @@ def process_purity(image, horse):
     # Otherwise the horse was purchased
     else:
         horse.set_obtained_method("Purchase","Unknown")
+
+def process_breed(image, horse):
+    # Breed in location
+    coords_to_check = (425,260, 720,335)
+    new_image = image.crop(coords_to_check)
+    text = pytesseract.pytesseract.image_to_string(new_image, lang="train")
+    # Remove the name from the text read
+    
+    if "(" in text:
+        text = text.split("(")
+        breed = text[0]
+        name = text[-1].remove(")")
+        horse.set_name(name)
+        horse.set_breed(breed)
+
 
 def check_hair_colour(value):
     file = open("Hair Colours.txt", "r")
@@ -472,7 +509,17 @@ for file in all_files:
 for key in list_of_keys:
     stats_image = Image.open(f"{path}\\{key}")
     rarity_image = Image.open(f"{path}\\{paired_files[key]}")
+
+    # Trim these images
+    stats_image = stats_image.crop((219,250, 740,829))
+    rarity_image = rarity_image.crop((617,360, 1302,709))
     # Process the stats
     horses.append(process_image(stats_image))
     # Process the purity
     process_purity(rarity_image, horses[-1])
+    # Process the breed and name
+    process_breed(stats_image, horses[-1])
+
+# Now display all the horses data
+for horse in horses:
+    print(horse.get_everything())
